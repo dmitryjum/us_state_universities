@@ -3,7 +3,7 @@
 require 'open-uri'
 
 module Enumerable
-  def pmap(cores = 6, &block)
+  def pmap(cores = 10, &block)
     [].tap do |result|
       each_slice((count.to_f/cores).ceil).map do |slice|
         Thread.new(result) do |result|
@@ -19,6 +19,12 @@ end
 
 class WikiReader
   attr_reader :wiki_state_colleges, :base_wiki_url
+
+  def self.report_time
+    t = Time.now
+    yield
+    puts Time.now-t
+  end
 
   def initialize
     @wiki_state_colleges = "https://en.wikipedia.org/wiki/List_of_state_universities_in_the_United_States"
@@ -44,6 +50,7 @@ class WikiReader
         #removes new lines in the end of lines
         hash[tr.css("th").text.gsub("\n",", ").gsub(/,\s\b|\[(.*?)\]|\W+$/,"").strip] = tr.css("td").text.gsub(/\[(.*?)\]|\W+$/,"").gsub("\n",", ").strip
       end
+      # puts title
       hash
     end
   end
