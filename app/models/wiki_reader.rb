@@ -2,22 +2,31 @@
 # require 'nokogiri'
 require 'open-uri'
 
+module Enumerable
+  def pmap(cores = 6, &block)
+    [].tap do |result|
+      each_slice((count.to_f/cores).ceil).map do |slice|
+        Thread.new(result) do |result|
+          slice.each do |item|
+            result << block.call(item)
+          end
+        end
+      end.map(&:join)
+    end
+  end
+end
+
 
 class WikiReader
   attr_reader :wiki_state_colleges, :base_wiki_url
+
   def initialize
     @wiki_state_colleges = "https://en.wikipedia.org/wiki/List_of_state_universities_in_the_United_States"
     @base_wiki_url = "https://en.wikipedia.org"
   end
 
   def array_of_schools
-    @array_of_schools ||= get_school_urls.map {|url| school_hash(url)}.compact.delete_if {|s| s["title"] == ""}
-  end
-
-  def write_to_file
-    f = File.open("array_of_wiki_school.yml", "w")
-    f.write array_of_schools
-    puts "array_of_wiki_school has been written"
+    @array_of_schools ||= get_school_urls.pmap {|url| school_hash(url)}.compact.delete_if {|s| s["title"] == ""}
   end
 
   private
@@ -35,7 +44,6 @@ class WikiReader
         #removes new lines in the end of lines
         hash[tr.css("th").text.gsub("\n",", ").gsub(/,\s\b|\[(.*?)\]|\W+$/,"").strip] = tr.css("td").text.gsub(/\[(.*?)\]|\W+$/,"").gsub("\n",", ").strip
       end
-      puts title
       hash
     end
   end
@@ -54,7 +62,3 @@ class WikiReader
     Nokogiri::HTML(open(url))
   end
 end
-
-# reader = WikiReader.new
-# reader.array_of_schools
-# reader.write_to_file
