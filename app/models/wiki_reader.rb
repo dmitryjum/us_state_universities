@@ -1,5 +1,3 @@
-# require 'pry'
-# require 'nokogiri'
 require 'open-uri'
 
 module Enumerable
@@ -14,6 +12,10 @@ module Enumerable
       end.map(&:join)
     end
   end
+
+  def dups
+    inject({}) {|h,v| h[v]=h[v].to_i+1; h}.reject{|k,v| v==1}.keys
+  end
 end
 
 
@@ -26,13 +28,17 @@ class WikiReader
     puts Time.now-t
   end
 
+  def self.build
+    new.array_of_schools
+  end
+
   def initialize
     @wiki_state_colleges = "https://en.wikipedia.org/wiki/List_of_state_universities_in_the_United_States"
     @base_wiki_url = "https://en.wikipedia.org"
   end
 
   def array_of_schools
-    @array_of_schools ||= get_school_urls.pmap {|url| school_hash(url)}.compact.delete_if {|s| s["title"] == ""}
+    @array_of_schools ||= get_school_urls.pmap {|url| school_hash(url)}.compact.delete_if {|s| s["title"] == ""}.uniq
   end
 
   private
@@ -50,7 +56,7 @@ class WikiReader
         #removes new lines in the end of lines
         hash[tr.css("th").text.gsub("\n",", ").gsub(/,\s\b|\[(.*?)\]|\W+$/,"").strip] = tr.css("td").text.gsub(/\[(.*?)\]|\W+$/,"").gsub("\n",", ").strip
       end
-      # puts title
+      puts title
       hash
     end
   end
