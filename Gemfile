@@ -50,7 +50,7 @@ group :test, :development do
   gem 'ffaker'
   # gem 'looksee'
   gem 'pry-remote'
-  gem 'rspec-rails', '~> 3.0'
+  gem 'rspec-rails'
   # gem 'selenium-webdriver'
 end
 
