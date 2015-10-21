@@ -49,12 +49,13 @@ class WikiReader
       title = page.css(".fn.org").text.gsub("\n",", ")
       trs = page.css(".vcard tr").select {|tr| tr.css("th").any? }
       hash = {"title" => title}
+      hash["details"] = {}
       trs.each do |tr|
         #regex explained: removes first comma in key
         #removes all square brackets and everything between them,
         #removes empty spaces and black space looking characters in the end of lines,
         #removes new lines in the end of lines
-        hash[tr.css("th").text.gsub("\n",", ").gsub(/,\s\b|\[(.*?)\]|\W+$/,"").strip] = tr.css("td").text.gsub(/\[(.*?)\]|\W+$/,"").gsub("\n",", ").strip
+        hash["details"][tr.css("th").text.gsub("\n",", ").gsub(/,\s\b|\[(.*?)\]|\W+$/,"").strip] = tr.css("td").text.gsub(/\[(.*?)\]|\W+$/,"").gsub("\n",", ").strip
       end
       puts title
       hash
