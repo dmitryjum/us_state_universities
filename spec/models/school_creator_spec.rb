@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe SchoolCreator do
   describe ".insert_or_update" do
@@ -21,7 +21,7 @@ describe SchoolCreator do
 
     it 'creates new records' do
       expect {subject}.to change { School.count }.by 1
-      expect(School.find_by_title(data.title)).to be
+      expect(School.find_by_title(data["title"])).to be
     end
 
     it 'finds and updates existing records with new data' do
