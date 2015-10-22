@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :school do
     title {FFaker::Education.school_name}
     details do
-      {"Established"=>"1969",
+        {"Established"=>"1969",
           "Type"=>FFaker::Lorem.word,
           "Endowment"=>"$1.23 billion (pooled)",
           "Chancellor"=>"Robert Witt",
