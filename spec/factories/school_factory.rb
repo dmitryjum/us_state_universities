@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :school do
-    title {FFaker::Education.school_name}
+    title {FFaker::Lorem.word}
     details do
         {"Established"=>"1969",
           "Type"=>FFaker::Lorem.word,
