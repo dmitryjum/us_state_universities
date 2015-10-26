@@ -2,7 +2,6 @@ require 'rails_helper'
 
 describe API::V1::SchoolsController do
   before do
-    # factory_schools = FactoryGirl.create_list(:school, 2)
     school1 = FactoryGirl.create :school, title: "NYU"
     school2 = FactoryGirl.create :school, title: "UCLA"
     host! 'api.example.com'
@@ -32,7 +31,7 @@ describe API::V1::SchoolsController do
   context "it looks up the school by 'title' param" do
     it "receives response with the correct count of schools in the list by requested keyword" do
       keyword = "n"
-      requested_schools = School.where_by_title keyword
+      requested_schools = School.where_title_is keyword
       get api_v1_schools_path(title: keyword), {}, { "Accept" => "application/json" }
       body = JSON.parse(response.body)
       expect(body.length).to eq requested_schools.length
@@ -40,25 +39,25 @@ describe API::V1::SchoolsController do
 
     it 'receives response with correct school titles in the list by requested keyword' do
       keyword = "n"
-      requested_schools = School.where_by_title keyword
+      requested_schools = School.where_title_is keyword
       get api_v1_schools_path(title: "n"), {}, { "Accept" => "application/json" }
       body = JSON.parse(response.body)
       expect(body.map {|s| s["title"]}.sort).to eq requested_schools.pluck(:title).sort
     end
   end
 
-  context "it looks up the school by 'details' param" do
+  context "it finds schools by exact possible key in 'details' json of school object" do
     it "receives response with the correct count of schools in the list by requested keyword" do
-      keyword = "Robert"
-      requested_schools = School.where_by_details keyword
+      keyword = "Type"
+      requested_schools = School.where_details_key_is keyword
       get api_v1_schools_path(details: keyword), {}, { "Accept" => "application/json" }
       body = JSON.parse(response.body)
       expect(body.length).to eq requested_schools.length
     end
 
     it 'receives response with correct school titles in the list by requested keyword' do
-      keyword = "Robert"
-      requested_schools = School.where_by_details keyword
+      keyword = "Type"
+      requested_schools = School.where_details_key_is keyword
       get api_v1_schools_path(details: keyword), {}, { "Accept" => "application/json" }
       body = JSON.parse(response.body)
       expect(body.map {|s| s["details"]}.sort).to eq requested_schools.pluck(:details).sort

@@ -4,13 +4,17 @@ module API
 
       def index
         if params[:title].present?
-          @schools = School.where_by_title params[:title]
+          @schools = School.where_title_is params[:title]
         elsif params[:details].present?
-          @schools = School.where_by_details params[:details]
+          @schools = School.where_details_key_is params[:details]
         else
           @schools = School.all
         end
         render json: @schools, status: 200
+      end
+
+      def find_by_details
+
       end
 
     end
