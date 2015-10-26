@@ -55,7 +55,7 @@ class WikiReader
         #removes all square brackets and everything between them,
         #removes empty spaces and black space looking characters in the end of lines,
         #removes new lines in the end of lines
-        hash["details"][tr.css("th").text.gsub("\n",", ").gsub(/,\s\b|\[(.*?)\]|\W+$/,"").strip] = tr.css("td").text.gsub(/\[(.*?)\]|\W+$/,"").gsub("\n",", ").strip
+        hash["details"][tr.css("th").text.gsub("\n",", ").gsub(/,\s\b|\[(.*?)\]|\W+$/,"").strip.downcase] = tr.css("td").text.gsub(/\[(.*?)\]|\W+$/,"").gsub("\n",", ").strip
       end
       puts title
       hash
