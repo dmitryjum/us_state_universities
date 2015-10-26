@@ -4,9 +4,9 @@ module API
 
       def index
         if params[:title].present?
-          @schools = School.where("title ~* ?", params[:title])
+          @schools = School.where_by_title params[:title]
         elsif params[:details].present?
-          # @schools = School.where(jsonb finder)
+          @schools = School.where_by_details params[:details]
         else
           @schools = School.all
         end
