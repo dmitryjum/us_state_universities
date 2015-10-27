@@ -6,15 +6,18 @@ module API
         if params[:title].present?
           @schools = School.where_title_is params[:title]
         elsif params[:details].present?
-          @schools = School.where_details_key_is params[:details]
+          if params[:details].is_a? Hash
+            @schools = School.where_details_are params[:details]
+          else
+            @schools = School.where_details_key_is params[:details]
+          end
         else
           @schools = School.all
         end
         render json: @schools, status: 200
       end
 
-      def find_by_details
-
+      def twenty_pop_keys
       end
 
     end

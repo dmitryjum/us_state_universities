@@ -2,16 +2,18 @@ FactoryGirl.define do
   factory :school do
     title {FFaker::Lorem.word}
     details do
-        {"Established"=>"1969",
-          "Type"=>FFaker::Lorem.word,
-          "Endowment"=>"$1.23 billion (pooled)",
-          "Chancellor"=>"Robert Witt",
-          "Academic staff"=>"3,531",
-          "Undergraduates"=>"43,297",
-          "Postgraduates"=>"13,654",
-          "Location"=> FFaker::Address.street_address,
-          "Campus"=>", Birmingham (UAB, Huntsville (UAH, Tuscaloosa (UA",
-          "Website"=>"http://www.uasystem.ua.edu"}
+        {
+          "established"=>"1969",
+          "type"=>FFaker::Lorem.word,
+          "endowment"=>"$1.23 billion (pooled)",
+          "chancellor"=>"Robert Witt",
+          "academic staff"=>"3,531",
+          "undergraduates"=>"43,297",
+          "postgraduates"=>"13,654",
+          "location"=> FFaker::Address.street_address,
+          "campus"=>", Birmingham (UAB, Huntsville (UAH, Tuscaloosa (UA",
+          "website"=>"http://www.uasystem.ua.edu"
+        }
     end
   end
 end

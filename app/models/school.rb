@@ -4,6 +4,7 @@ class School < ActiveRecord::Base
 
   scope :where_title_is, -> (keyword) { where("title ~* ?", keyword) }
   scope :where_details_key_is, -> (keyword) { where("details ? '#{keyword}'") }
+  scope :where_details_are, ->(details) { where("details ->> '#{details.first.first}' ~~* '%#{details.first.last}%'")}
 
   # example of regex search in jsonb "details ->> 'Type' ~~* 'public'"
   # LIKE (~~) is simple and fast but limited in its capabilities.

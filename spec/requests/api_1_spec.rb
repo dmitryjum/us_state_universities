@@ -48,19 +48,37 @@ describe API::V1::SchoolsController do
 
   context "it finds schools by exact possible key in 'details' json of school object" do
     it "receives response with the correct count of schools in the list by requested keyword" do
-      keyword = "Type"
-      requested_schools = School.where_details_key_is keyword
+      keyword = "type"
+      requested_school_details = School.pluck(:details)
       get api_v1_schools_path(details: keyword), {}, { "Accept" => "application/json" }
       body = JSON.parse(response.body)
-      expect(body.length).to eq requested_schools.length
+      expect(body.length).to eq requested_school_details.length
     end
 
     it 'receives response with correct school titles in the list by requested keyword' do
-      keyword = "Type"
-      requested_schools = School.where_details_key_is keyword
+      keyword = "type"
+      requested_school_details = School.pluck(:details)
       get api_v1_schools_path(details: keyword), {}, { "Accept" => "application/json" }
       body = JSON.parse(response.body)
-      expect(body.map {|s| s["details"]}.sort).to eq requested_schools.pluck(:details).sort
+      expect(body.map {|s| s["details"]}).to eq requested_school_details
+    end
+  end
+
+  context "it finds schools by arbitrary value case insensitive for specific key in 'details' json of school object" do
+    it "receives response with the correct count of schools in the list by requested keyword" do
+      hash = {"chancellor" => "wit"}
+      requested_school_details = School.pluck(:details)
+      get api_v1_schools_path(details: hash), {}, { "Accept" => "application/json" }
+      body = JSON.parse(response.body)
+      expect(body.length).to eq requested_school_details.length
+    end
+
+    it 'receives response with correct school titles in the list by requested keyword' do
+      hash = {"postgraduates" => "13"}
+      requested_school_details = School.pluck(:details)
+      get api_v1_schools_path(details: hash), {}, { "Accept" => "application/json" }
+      body = JSON.parse(response.body)
+      expect(body.map {|s| s["details"]}).to eq requested_school_details
     end
   end
 
