@@ -18,11 +18,21 @@ class School < ActiveRecord::Base
   end
 
   def self.top_twenty_keys
+    {}.tap do |key_counts|
+      uniq_details_keys.each {|k| key_counts[k] = 1}
+      details_keys.each {|k| key_counts[k] += 1 if uniq_details_keys.include? k}
+      key_counts.to_a.sort_by {|a| a.last}.reverse
+    end.first(20).to_h
   end
 
   private
 
-  def uniq_details_keys
+  def self.details_keys
+    @not_uniq_keys ||= pluck(:details).flat_map(&:keys)
+  end
+
+  def self.uniq_details_keys
+    @uniq_keys ||= details_keys.uniq
   end
 
   # example of regex search in jsonb "details ->> 'Type' ~~* 'public'"
