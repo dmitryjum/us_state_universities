@@ -6,6 +6,25 @@ class School < ActiveRecord::Base
   scope :where_details_key_is, -> (keyword) { where("details ? '#{keyword}'") }
   scope :where_details_are, ->(details) { where("details ->> '#{details.first.first}' ~~* '%#{details.first.last}%'")}
 
+
+  def self.where_params_are params
+    if params[:title].present?
+      where_title_is params[:title]
+    elsif params[:details].present?
+      params[:details].is_a?(Hash) ? where_details_are(params[:details]) : where_details_key_is(params[:details])
+    else
+      all
+    end
+  end
+
+  def self.top_twenty_keys
+  end
+
+  private
+
+  def uniq_details_keys
+  end
+
   # example of regex search in jsonb "details ->> 'Type' ~~* 'public'"
   # LIKE (~~) is simple and fast but limited in its capabilities.
   # ILIKE (~~*) the case insensitive variant.

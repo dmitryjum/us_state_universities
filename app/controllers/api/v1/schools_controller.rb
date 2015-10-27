@@ -3,21 +3,13 @@ module API
     class SchoolsController < ApplicationController
 
       def index
-        if params[:title].present?
-          @schools = School.where_title_is params[:title]
-        elsif params[:details].present?
-          if params[:details].is_a? Hash
-            @schools = School.where_details_are params[:details]
-          else
-            @schools = School.where_details_key_is params[:details]
-          end
-        else
-          @schools = School.all
-        end
+        @schools = School.where_params_are params
         render json: @schools, status: 200
       end
 
-      def twenty_pop_keys
+      def top_twenty_keys
+        @keys = School.top_twenty_keys
+        render json: @keys, status: 200
       end
 
     end
