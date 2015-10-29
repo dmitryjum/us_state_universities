@@ -21,8 +21,7 @@ class School < ActiveRecord::Base
     {}.tap do |key_counts|
       uniq_details_keys.each {|k| key_counts[k] = 0}
       details_keys.each {|k| key_counts[k] += 1 if uniq_details_keys.include? k}
-      key_counts.to_a.sort_by {|a| a.last}.reverse
-    end.first(20).to_h
+    end.sort_by {|k,v| v}.reverse.first(20).to_h
   end
 
   def self.insert_or_update_one new_school
