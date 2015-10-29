@@ -4,19 +4,47 @@ describe API::V1::SchoolsController do
   before do
     school1 = FactoryGirl.create :school, title: "NYU"
     school2 = FactoryGirl.create :school, title: "UCLA"
+    school3 = FactoryGirl.create :school, details: {
+          "established"=>"1969",
+          "type"=>"Public university system",
+          "endowment"=>"$1.23 billion (pooled)",
+          "chancellor"=>"Robert Witt",
+          "academic staff"=>"3,531",
+          "undergraduates"=>"43,297",
+          "postgraduates"=>"13,654",
+          "location"=>", Alabama, USA",
+          "campus"=>", Birmingham (UAB, Huntsville (UAH, Tuscaloosa (UA",
+          "website"=>"http://www.uasystem.ua.edu",
+          "total" => "10000"
+        }
     host! 'api.example.com'
   end
 
+  let(:top_keys_hash) do
+      {
+        "established"=> 3,
+        "type"=> 3,
+        "endowment"=> 3,
+        "chancellor"=> 3,
+        "academic staff"=> 3,
+        "undergraduates"=> 3,
+        "postgraduates"=> 3,
+        "location"=> 3,
+        "campus"=> 3,
+        "website"=> 3,
+        "total"=> 1
+      }
+  end
   context 'requests the list of all schools with no params and gets it' do
     it 'receives success status' do
        get api_v1_schools_path, {}, { "Accept" => "application/json" }
        expect(response).to be_success
     end
 
-    it 'receives response with total of 2 school objects' do
+    it 'receives response with total of 3 school objects' do
       get api_v1_schools_path, {}, { "Accept" => "application/json" }
       body = JSON.parse(response.body)
-      expect(body.length).to eq 2
+      expect(body.length).to eq 3
     end
 
     it 'receives response with list of schools that are in DB' do
@@ -79,6 +107,14 @@ describe API::V1::SchoolsController do
       get api_v1_schools_path(details: hash), {}, { "Accept" => "application/json" }
       body = JSON.parse(response.body)
       expect(body.map {|s| s["details"]}).to eq requested_school_details
+    end
+  end
+
+  context "it requests top twenty 'details' json keys for API query reference" do
+    it "receives json with at least 20 k/v pairs, where keys are 'details' json keys and values are count of their appereances in DB" do
+      get top_twenty_keys_api_v1_schools_path, {}, { "Accept" => "application/json" }
+      body = JSON.parse(response.body)
+      expect(body).to eq top_keys_hash
     end
   end
 
