@@ -36,13 +36,13 @@ describe API::V1::SchoolsController do
       }
   end
   context 'requests the list of all schools with no params and gets it' do
-    before(:each) do
+    before :each do
       get api_v1_schools_path, {}, { "Accept" => "application/json" }
-      @json_body = JSON.parse(response.body)
+      @json_body = json_response
     end
 
     it 'receives success status' do
-       expect(response).to be_success
+      expect(response).to be_success
     end
 
     it 'receives response with total of 3 school objects' do
@@ -57,20 +57,18 @@ describe API::V1::SchoolsController do
   end
 
   context "it looks up the school by 'title' param" do
-    it "receives response with the correct count of schools in the list by requested keyword" do
+    before :each do
       keyword = "n"
-      requested_schools = School.where_title_is keyword
+      @requested_schools = School.where("title ~* ?", keyword)
       get api_v1_schools_path(title: keyword), {}, { "Accept" => "application/json" }
-      body = JSON.parse(response.body)
-      expect(body.length).to eq requested_schools.length
+      @json_body = json_response
+    end
+    it "receives response with the correct count of schools in the list by requested keyword" do
+      expect(@json_body.length).to eq @requested_schools.length
     end
 
     it 'receives response with correct school titles in the list by requested keyword' do
-      keyword = "n"
-      requested_schools = School.where_title_is keyword
-      get api_v1_schools_path(title: "n"), {}, { "Accept" => "application/json" }
-      body = JSON.parse(response.body)
-      expect(body.map {|s| s["title"]}.sort).to eq requested_schools.pluck(:title).sort
+      expect(@json_body.map {|s| s["title"]}.sort).to eq @requested_schools.pluck(:title).sort
     end
   end
 

@@ -20,6 +20,11 @@ require 'factory_girl_rails'
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+
+def json_response
+  @json_response ||= JSON.parse(response.body)
+end
+
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   # rspec-expectations config goes here. You can use an alternate
