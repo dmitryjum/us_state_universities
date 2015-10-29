@@ -25,6 +25,12 @@ class School < ActiveRecord::Base
     end.first(20).to_h
   end
 
+  def self.insert_or_update_one new_school
+    current_school = find_or_create_by(title: new_school["title"])
+    current_school.update(details: new_school["details"])
+    current_school
+  end
+
   private
 
   def self.details_keys

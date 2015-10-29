@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-describe SchoolCreator do
+describe School do
   describe ".insert_or_update_one" do
-    subject {SchoolCreator.insert_or_update_one(data)}
+    subject {School.insert_or_update_one(data)}
     let(:school) {FactoryGirl.create :school, title: "The University of Alabama System"}
     let(:data) do
       {"title"=>"The University of Alabama System",

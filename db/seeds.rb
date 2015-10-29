@@ -5,4 +5,4 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-WikiReader.build.each {|school| SchoolCreator.insert_or_update_one school}
+WikiReader.build.each {|school| School.insert_or_update_one school}
