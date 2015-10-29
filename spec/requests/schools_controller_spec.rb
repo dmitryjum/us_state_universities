@@ -73,20 +73,18 @@ describe API::V1::SchoolsController do
   end
 
   context "it finds schools by exact possible key in 'details' json of school object" do
-    it "receives response with the correct count of schools in the list by requested keyword" do
+    before :each do
       keyword = "type"
-      requested_school_details = School.pluck(:details)
+      @requested_school_details = School.pluck(:details)
       get api_v1_schools_path(details: keyword), {}, { "Accept" => "application/json" }
-      body = JSON.parse(response.body)
-      expect(body.length).to eq requested_school_details.length
+      @json_body = json_response
+    end
+    it "receives response with the correct count of schools in the list by requested keyword" do
+      expect(@json_body.length).to eq @requested_school_details.length
     end
 
     it 'receives response with correct school titles in the list by requested keyword' do
-      keyword = "type"
-      requested_school_details = School.pluck(:details)
-      get api_v1_schools_path(details: keyword), {}, { "Accept" => "application/json" }
-      body = JSON.parse(response.body)
-      expect(body.map {|s| s["details"]}).to eq requested_school_details
+      expect(@json_body.map {|s| s["details"]}).to eq @requested_school_details
     end
   end
 
