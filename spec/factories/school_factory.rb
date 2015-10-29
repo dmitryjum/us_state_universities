@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :school do
-    title {FFaker::Lorem.word}
+    title {SecureRandom.base64(20)}
     details do
         {
           "established"=>"1969",
