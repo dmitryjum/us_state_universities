@@ -17,23 +17,8 @@ describe API::V1::SchoolsController do
           "website"=>"http://www.uasystem.ua.edu",
           "total" => "10000"
         }
+    @requested_school_details = School.pluck(:details)
     host! 'api.example.com'
-  end
-
-  let(:top_keys_hash) do
-      {
-        "established"=> 3,
-        "type"=> 3,
-        "endowment"=> 3,
-        "chancellor"=> 3,
-        "academic staff"=> 3,
-        "undergraduates"=> 3,
-        "postgraduates"=> 3,
-        "location"=> 3,
-        "campus"=> 3,
-        "website"=> 3,
-        "total"=> 1
-      }
   end
   context 'requests the list of all schools with no params and gets it' do
     before :each do
@@ -75,7 +60,6 @@ describe API::V1::SchoolsController do
   context "it finds schools by exact possible key in 'details' json of school object" do
     before :each do
       keyword = "type"
-      @requested_school_details = School.pluck(:details)
       get api_v1_schools_path(details: keyword), {}, { "Accept" => "application/json" }
       @json_body = json_response
     end
@@ -89,28 +73,36 @@ describe API::V1::SchoolsController do
   end
 
   context "it finds schools by arbitrary value case insensitive for specific key in 'details' json of school object" do
+    before :each do
+      get api_v1_schools_path(details: {"postgraduates" => "13"}), {}, { "Accept" => "application/json" }
+      @json_body = json_response
+    end
     it "receives response with the correct count of schools in the list by requested keyword" do
-      hash = {"chancellor" => "wit"}
-      requested_school_details = School.pluck(:details)
-      get api_v1_schools_path(details: hash), {}, { "Accept" => "application/json" }
-      body = JSON.parse(response.body)
-      expect(body.length).to eq requested_school_details.length
+      expect(@json_body.length).to eq @requested_school_details.length
     end
 
     it 'receives response with correct school titles in the list by requested keyword' do
-      hash = {"postgraduates" => "13"}
-      requested_school_details = School.pluck(:details)
-      get api_v1_schools_path(details: hash), {}, { "Accept" => "application/json" }
-      body = JSON.parse(response.body)
-      expect(body.map {|s| s["details"]}).to eq requested_school_details
+      expect(@json_body.map {|s| s["details"]}).to eq @requested_school_details
     end
   end
 
   context "it requests top twenty 'details' json keys for API query reference" do
     it "receives json with at least 20 k/v pairs, where keys are 'details' json keys and values are count of their appereances in DB" do
       get top_twenty_keys_api_v1_schools_path, {}, { "Accept" => "application/json" }
-      body = JSON.parse(response.body)
-      expect(body).to eq top_keys_hash
+      json_body = json_response
+      expect(json_body).to eq({
+            "established"=> 3,
+            "type"=> 3,
+            "endowment"=> 3,
+            "chancellor"=> 3,
+            "academic staff"=> 3,
+            "undergraduates"=> 3,
+            "postgraduates"=> 3,
+            "location"=> 3,
+            "campus"=> 3,
+            "website"=> 3,
+            "total"=> 1
+          })
     end
   end
 
