@@ -1,32 +1,7 @@
 require 'open-uri'
 
-module Enumerable
-  def pmap(cores = 10, &block)
-    [].tap do |result|
-      each_slice((count.to_f/cores).ceil).map do |slice|
-        Thread.new(result) do |result|
-          slice.each do |item|
-            result << block.call(item)
-          end
-        end
-      end.map(&:join)
-    end
-  end
-
-  def dups
-    inject({}) {|h,v| h[v]=h[v].to_i+1; h}.reject{|k,v| v==1}.keys
-  end
-end
-
-
 class WikiReader
   attr_reader :wiki_state_colleges, :base_wiki_url
-
-  def self.report_time
-    t = Time.now
-    yield
-    puts Time.now-t
-  end
 
   def self.build
     new.array_of_schools
@@ -38,7 +13,7 @@ class WikiReader
   end
 
   def array_of_schools
-    @array_of_schools ||= get_school_urls.pmap {|url| school_hash(url)}.compact.delete_if {|s| s["title"] == ""}.uniq
+    @array_of_schools ||= get_school_urls.map {|url| school_hash(url)}.compact.delete_if {|s| s["title"] == ""}.uniq
   end
 
   private
