@@ -19,15 +19,24 @@ describe School do
           "Website"=>"http://www.uasystem.ua.edu"}
        }
     end
+    context "it creates new records, finds and updates existing ones" do
+      it 'it increases schools count by 1' do
+        expect {subject}.to change { School.count }.by 1
+      end
 
-    it 'creates new records' do
-      expect {subject}.to change { School.count }.by 1
-      expect(School.find_by_title(data["title"])).to be
-    end
+      it 'creates school with correct title' do
+        subject
+        expect(School.find_by_title(data["title"])).to be
+      end
 
-    it 'finds and updates existing records with new data' do
-      expect(subject.title).to eq(data["title"])
-      expect(subject.details).to eq(data["details"])
+      it 'it correctly updates school title' do
+        expect(subject.title).to eq(data["title"])
+      end
+
+      it 'it correctly updates school details' do
+        expect(subject.details).to eq(data["details"])
+      end
+
     end
   end
 
