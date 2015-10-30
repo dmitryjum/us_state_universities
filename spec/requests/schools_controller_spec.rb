@@ -48,6 +48,7 @@ describe API::V1::SchoolsController do
       get api_v1_schools_path(title: keyword), {}, { "Accept" => "application/json" }
       @json_body = json_response
     end
+
     it "receives response with the correct count of schools in the list by requested keyword" do
       expect(@json_body.length).to eq @requested_schools.length
     end
@@ -63,6 +64,7 @@ describe API::V1::SchoolsController do
       get api_v1_schools_path(details: keyword), {}, { "Accept" => "application/json" }
       @json_body = json_response
     end
+
     it "receives response with the correct count of schools in the list by requested keyword" do
       expect(@json_body.length).to eq @requested_school_details.length
     end
@@ -77,6 +79,7 @@ describe API::V1::SchoolsController do
       get api_v1_schools_path(details: {"postgraduates" => "13"}), {}, { "Accept" => "application/json" }
       @json_body = json_response
     end
+
     it "receives response with the correct count of schools in the list by requested keyword" do
       expect(@json_body.length).to eq @requested_school_details.length
     end
