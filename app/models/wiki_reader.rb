@@ -21,6 +21,7 @@ class WikiReader
   def school_hash school_link
     unless /wiki/.match(school_link).nil?
       page = read_page "#{base_wiki_url}#{school_link}"
+      # process_page(page)
       title = page.css(".fn.org").text.gsub("\n",", ")
       trs = page.css(".vcard tr").select {|tr| tr.css("th").any? }
       hash = {"title" => title}

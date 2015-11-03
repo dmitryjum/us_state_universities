@@ -20,7 +20,16 @@ describe API::V1::SchoolsController do
     @requested_school_details = School.pluck(:details)
     host! 'api.example.com'
   end
-  context 'requests the list of all schools with no params and gets it' do
+
+  context 'requests the list of all schools with no params and gets it in xml' do
+    it 'receives success status and response content type class of Mime::XML' do
+      get api_v1_schools_path, {}, {'Accept' => Mime::XML}
+      expect(response).to be_success
+      expect(response.header['Content-Type']).to include 'application/xml'
+    end
+  end
+
+  context 'requests the list of all schools with no params and gets it in json' do
     before :each do
       get api_v1_schools_path, {}, { "Accept" => "application/json" }
       @json_body = json_response
