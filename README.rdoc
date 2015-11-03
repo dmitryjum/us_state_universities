@@ -1,1 +1,10 @@
+Query examples:
+
+http://usastateuniversities.herokuapp.com/api/v1/schools  -- get all schools
+http://usastateuniversities.herokuapp.com/api/v1/schools/top_twenty_keys  -- get json with top 20 details keys
+http://usastateuniversities.herokuapp.com/api/v1/schools?details=type  -- find all schools that have key 'type' in json of their details
+http://usastateuniversities.herokuapp.com/api/v1/schools?details%5Bpostgraduates%5D=13 -- find all schools that have number 13 within the value of 'postgraduates' key for their 'details' json
+
 API server that daily reads Wikipedia page: "https://en.wikipedia.org/wiki/List_of_state_universities_in_the_United_States college", looks up college pages from the list on the page, parses college info into hashes and saves in DB, updates existing and adds new ones. It contains around 650 state colleges. User can query colleges by their name or any additional details. The server is built with Ruby on Rails and PostgreSQL DB with TDD pattern. In current stage database contains one Schools table with 'title:string' and 'details:jsonb' rows. Postgres Jsonb datatype allows the server to update DB with new schools with any possible new attributes and their values without migrations.
+
+High quality documentation is comming soon.
