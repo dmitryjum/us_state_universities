@@ -1,0 +1,82 @@
+{
+  "apiVersion": "1.0",
+  "swaggerVersion": "1.2",
+  "basePath": "http://api.usastateuniversities.herokuapp.com/",
+  "resourcePath": "schools",
+  "apis": [
+    {
+      "path": "api/v1/schools/top_twenty_keys.json",
+      "operations": [
+        {
+          "summary": "Fetches list of top twenty 'details' keys with count of their apperance in DataBase",
+          "notes": "The response of this method serves as guide for user on what to query",
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "User",
+              "message": "Success"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Not Found"
+            }
+          ],
+          "method": "get",
+          "nickname": "API::V1::Schools#top_twenty_keys"
+        }
+      ]
+    },
+    {
+      "path": "api/v1/schools.json",
+      "operations": [
+        {
+          "summary": "Fetches all School objects",
+          "notes": "This lists all USA State college objects in JSON",
+          "parameters": [
+            {
+              "paramType": "query",
+              "name": "title",
+              "type": "string",
+              "description": "Find School by title",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "details",
+              "type": "string",
+              "description": "Find all schools with specific 'details' key",
+              "required": false
+            },
+            {
+              "paramType": "query",
+              "name": "details",
+              "type": "hash",
+              "description": "Find all schools with specific key and arbitrary value as {details: {'type' => 'pub'}}",
+              "required": false
+            }
+          ],
+          "responseMessages": [
+            {
+              "code": 200,
+              "responseModel": "User",
+              "message": "Success"
+            },
+            {
+              "code": 404,
+              "responseModel": null,
+              "message": "Not Found"
+            },
+            {
+              "code": 406,
+              "responseModel": null,
+              "message": "Not Acceptable"
+            }
+          ],
+          "method": "get",
+          "nickname": "API::V1::Schools#index"
+        }
+      ]
+    }
+  ]
+}
