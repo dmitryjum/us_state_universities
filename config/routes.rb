@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-
+  root to: 'apipie/apipies#index'
   apipie
   namespace :api do
     namespace :v1 do
