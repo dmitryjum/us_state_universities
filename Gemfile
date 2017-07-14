@@ -34,6 +34,8 @@ gem 'apipie-rails'
 
 gem 'rails-api'
 
+gem 'rollbar'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
