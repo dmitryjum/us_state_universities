@@ -1,4 +1,4 @@
-class API::V1::SchoolsController < ApplicationController
+class Api::V1::SchoolsController < ApplicationController
 
   api :GET, "/v1/schools", "List all schools"
   param :title, String, :desc => "Find school by arbitrary title \n {'title' => 'Conn'}, or '/api/v1/schools?title=conn'"
