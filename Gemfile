@@ -28,7 +28,9 @@ gem 'rollbar'
 gem 'bootsnap', '>= 1.1.0', require: false
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.7'
+
+gem 'jwt'
 
 # Use unicorn as the app server
 # gem 'unicorn'
