@@ -1,4 +1,4 @@
-class School < ActiveRecord::Base
+class School < ApplicationRecord
   validates_presence_of :title
   validates_uniqueness_of :title
 
@@ -11,7 +11,7 @@ class School < ActiveRecord::Base
     if params[:title].present?
       where_title_is params[:title]
     elsif params[:details].present?
-      params[:details].is_a?(Hash) ? where_details_are(params[:details]) : where_details_key_is(params[:details])
+      params[:details].is_a?(ActionController::Parameters) ? where_details_are(params[:details].as_json) : where_details_key_is(params[:details])
     else
       all
     end

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :school do
     title {SecureRandom.base64(20)}
     details do

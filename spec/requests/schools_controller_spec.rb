@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-describe API::V1::SchoolsController do
+describe Api::V1::SchoolsController do
   before do
-    school1 = FactoryGirl.create :school, title: "NYU"
-    school2 = FactoryGirl.create :school, title: "UCLA"
-    school3 = FactoryGirl.create :school, details: {
+    school1 = FactoryBot.create :school, title: "NYU"
+    school2 = FactoryBot.create :school, title: "UCLA"
+    school3 = FactoryBot.create :school, details: {
           "established"=>"1969",
           "type"=>"Public university system",
           "endowment"=>"$1.23 billion (pooled)",
@@ -23,7 +23,7 @@ describe API::V1::SchoolsController do
 
   context 'requests the list of all schools with no params and gets it in xml' do
     it 'receives success status and response content type class of Mime::XML' do
-      get api_v1_schools_path, {}, {'Accept' => Mime::XML}
+      get api_v1_schools_path, headers: {'Accept' => Mime[:xml]}
       expect(response).to be_success
       expect(response.header['Content-Type']).to include 'application/xml'
     end
@@ -31,7 +31,7 @@ describe API::V1::SchoolsController do
 
   context 'requests the list of all schools with no params and gets it in json' do
     before :each do
-      get api_v1_schools_path, {}, { "Accept" => "application/json" }
+      get api_v1_schools_path, headers: { "Accept" => "application/json" }
       @json_body = json_response
     end
 
@@ -54,7 +54,7 @@ describe API::V1::SchoolsController do
     before :each do
       keyword = "n"
       @requested_schools = School.where("title ~* ?", keyword)
-      get api_v1_schools_path(title: keyword), {}, { "Accept" => "application/json" }
+      get api_v1_schools_path(title: keyword), headers: { "Accept" => "application/json" }
       @json_body = json_response
     end
 
@@ -70,7 +70,7 @@ describe API::V1::SchoolsController do
   context "it finds schools by exact possible key in 'details' json of school object" do
     before :each do
       keyword = "type"
-      get api_v1_schools_path(details: keyword), {}, { "Accept" => "application/json" }
+      get api_v1_schools_path(details: keyword), headers: { "Accept" => "application/json" }
       @json_body = json_response
     end
 
@@ -85,7 +85,7 @@ describe API::V1::SchoolsController do
 
   context "it finds schools by arbitrary value case insensitive for specific key in 'details' json of school object" do
     before :each do
-      get api_v1_schools_path(details: {"postgraduates" => "13"}), {}, { "Accept" => "application/json" }
+      get api_v1_schools_path(details: {"postgraduates" => "13"}), headers: { "Accept" => "application/json" }
       @json_body = json_response
     end
 
@@ -100,7 +100,7 @@ describe API::V1::SchoolsController do
 
   context "it requests top twenty 'details' json keys for API query reference" do
     it "receives json with at least 20 k/v pairs, where keys are 'details' json keys and values are count of their appereances in DB" do
-      get top_twenty_keys_api_v1_schools_path, {}, { "Accept" => "application/json" }
+      get top_twenty_keys_api_v1_schools_path, headers: { "Accept" => "application/json" }
       json_body = json_response
       expect(json_body).to eq({
             "established"=> 3,
