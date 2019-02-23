@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.5.1'
+ruby '2.6.0'
 
 gem 'pry-rails'
 gem 'pg'
@@ -11,7 +11,7 @@ gem 'rails', '~> 5.2.1'
 # gem 'therubyracer',  platforms: :ruby
 
 # gem 'http'
-gem 'puma', '~> 2.13'
+gem 'puma'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
