@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       resources :schools, only: :index do
         collection do
           get :top_twenty_keys
+          patch :update
         end
       end
     end

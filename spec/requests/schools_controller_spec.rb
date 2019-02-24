@@ -2,6 +2,7 @@ require 'rails_helper'
 
 describe Api::V1::SchoolsController do
   before do
+    user = User.create email: "email@example.com", password: "password", password_confirmation: "password"
     school1 = FactoryBot.create :school, title: "NYU"
     school2 = FactoryBot.create :school, title: "UCLA"
     school3 = FactoryBot.create :school, details: {
@@ -18,6 +19,7 @@ describe Api::V1::SchoolsController do
           "total" => "10000"
         }
     @requested_school_details = School.pluck(:details)
+    @valid_auth_header = "Bearer #{JsonWebToken.encode({user_id: user.id})}"
     host! 'api.example.com'
   end
 
@@ -115,6 +117,53 @@ describe Api::V1::SchoolsController do
             "website"=> 3,
             "total"=> 1
           })
+    end
+  end
+
+  context 'it updates a school' do
+    before :each do
+      @first_school = School.first
+    end
+
+    it 'found by title' do
+      patch api_v1_schools_path(title: @first_school.title, school: {title: 'University of Magic'}), headers: { "Authorization": @valid_auth_header }
+      expect(response.status).to be 201
+      expect(json_response['title']).to eq(School.find(@first_school.id).title)
+    end
+
+    xit 'fails to update an invention' do
+      #needs similar validation tests as create
+      #once similar tests are implemented, needs refactoring of the test suit to avoid duplication
+
+       # describe 'it creates a new invention' do
+       #  it 'successfuly creates a new invention' do
+       #    new_invention = {
+       #      title: 'invention_66',
+       #      description: 'lights up like christmas tree',
+       #      user_name: 'Bright Lantern',
+       #      user_email: 'blan@gmail.com',
+       #      bits: {'power' => 1, 'uv-led' => 1},
+       #      materials: ['wires']
+       #    }
+       #    post api_v1_inventions_path(invention: new_invention), headers: { "Authorization": @valid_auth_header }
+       #    expect(response.status).to be 201
+       #    expect(json_response['title']).to eq(Invention.find_by_title('invention_66').title)
+       #  end
+
+       #  context 'fails to create a new invention' do
+       #    it 'fails bits count validation' do
+       #      new_invention = {
+       #        title: 'invention_66',
+       #        description: 'lights up like christmas tree',
+       #        user_name: 'Bright Lantern',
+       #        user_email: 'blan@gmail.com',
+       #        bits: {'power' => 1, 'uv-led' => 0},
+       #        materials: ['wires']
+       #      }
+       #      post api_v1_inventions_path(invention: new_invention), headers: { "Authorization": @valid_auth_header }
+       #      expect(response.status).to be 422
+       #      expect(json_response['validation'].first).to eq "bits value can't be 0 or not a number. Invention has to have at least 1 bit"
+       #    end
     end
   end
 
