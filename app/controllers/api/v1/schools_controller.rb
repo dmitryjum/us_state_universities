@@ -1,4 +1,5 @@
 class Api::V1::SchoolsController < ApplicationController
+  before_action :set_school, only: :update
 
   api :GET, "/v1/schools", "List all schools"
   param :title, String, :desc => "Find school by arbitrary title \n {'title' => 'Conn'}, or '/api/v1/schools?title=conn'"
@@ -21,5 +22,24 @@ class Api::V1::SchoolsController < ApplicationController
       format.json {render json: @keys, status: 200}
       format.xml {render xml: @keys, status: 200}
     end
+  end
+
+  def update
+    authenticate_request!
+    if @school.update(school_params)
+      render status: 201, json: @school
+    else
+      render json: @school.errors, status: :unprocessable_entity
+    end
+  end
+
+  private
+
+  def set_school
+    @school = School.find_by_title(params[:title])
+  end
+
+  def school_params
+    params.require(:school).permit(:title, :details => {})
   end
 end
