@@ -1,5 +1,6 @@
 class Api::V1::SchoolsController < ApplicationController
   before_action :set_school, only: :update
+  before_action :authenticate_request!, only: :update
 
   api :GET, "/v1/schools", "List all schools"
   param :title, String, :desc => "Find school by arbitrary title \n {'title' => 'Conn'}, or '/api/v1/schools?title=conn'"
@@ -25,7 +26,6 @@ class Api::V1::SchoolsController < ApplicationController
   end
 
   def update
-    authenticate_request!
     if @school.update(school_params)
       render status: 201, json: @school
     else

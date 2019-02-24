@@ -131,39 +131,19 @@ describe Api::V1::SchoolsController do
       expect(json_response['title']).to eq(School.find(@first_school.id).title)
     end
 
-    xit 'fails to update an invention' do
-      #needs similar validation tests as create
-      #once similar tests are implemented, needs refactoring of the test suit to avoid duplication
+    context 'fails to update a school' do
+      it 'fails title validation' do
+        @last_school = School.last
+        patch api_v1_schools_path(title: @first_school.title, school: {title: @last_school.title}), headers: { "Authorization": @valid_auth_header }
+        expect(response.status).to be 422
+        expect(json_response['title'].first).to eq "has already been taken"
+      end
 
-       # describe 'it creates a new invention' do
-       #  it 'successfuly creates a new invention' do
-       #    new_invention = {
-       #      title: 'invention_66',
-       #      description: 'lights up like christmas tree',
-       #      user_name: 'Bright Lantern',
-       #      user_email: 'blan@gmail.com',
-       #      bits: {'power' => 1, 'uv-led' => 1},
-       #      materials: ['wires']
-       #    }
-       #    post api_v1_inventions_path(invention: new_invention), headers: { "Authorization": @valid_auth_header }
-       #    expect(response.status).to be 201
-       #    expect(json_response['title']).to eq(Invention.find_by_title('invention_66').title)
-       #  end
-
-       #  context 'fails to create a new invention' do
-       #    it 'fails bits count validation' do
-       #      new_invention = {
-       #        title: 'invention_66',
-       #        description: 'lights up like christmas tree',
-       #        user_name: 'Bright Lantern',
-       #        user_email: 'blan@gmail.com',
-       #        bits: {'power' => 1, 'uv-led' => 0},
-       #        materials: ['wires']
-       #      }
-       #      post api_v1_inventions_path(invention: new_invention), headers: { "Authorization": @valid_auth_header }
-       #      expect(response.status).to be 422
-       #      expect(json_response['validation'].first).to eq "bits value can't be 0 or not a number. Invention has to have at least 1 bit"
-       #    end
+      it 'fails authentication' do
+        patch api_v1_schools_path(title: @first_school.title, school: {title: 'University of Magic'}), headers: { "Authorization": 'asdf' }
+        expect(response.status).to be 401
+        expect(json_response['error']).to eq "Invalid Request or Unauthorized"
+      end
     end
   end
 
