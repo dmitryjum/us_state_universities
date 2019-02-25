@@ -26,7 +26,7 @@ describe Api::V1::SchoolsController do
   context 'requests the list of all schools with no params and gets it in xml' do
     it 'receives success status and response content type class of Mime::XML' do
       get api_v1_schools_path, headers: {'Accept' => Mime[:xml]}
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(response.header['Content-Type']).to include 'application/xml'
     end
   end
@@ -38,7 +38,7 @@ describe Api::V1::SchoolsController do
     end
 
     it 'receives success status' do
-      expect(response).to be_success
+      expect(response).to be_successful
     end
 
     it 'receives response with total of 3 school objects' do
