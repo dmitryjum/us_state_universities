@@ -5,7 +5,7 @@ describe Api::V1::SchoolsController do
     user = User.create email: "email@example.com", password: "password", password_confirmation: "password"
     school1 = FactoryBot.create :school, title: "NYU"
     school2 = FactoryBot.create :school, title: "UCLA"
-    school3 = FactoryBot.create :school, details: {
+    school3 = FactoryBot.create :school, title: "Columbia", details: {
           "established"=>"1969",
           "type"=>"Public university system",
           "endowment"=>"$1.23 billion (pooled)",
@@ -117,6 +117,25 @@ describe Api::V1::SchoolsController do
             "website"=> 3,
             "total"=> 1
           })
+    end
+  end
+
+  context "it requests paginated result" do
+    it 'requests 2nd page with 2 schools per page and receives 1 school from 3' do
+      get api_v1_schools_path(per_page: 2, page: 2), headers: { "Accept" => "application/json" }
+      expect(json_response['records'].length).to be 1
+      expect(json_response['records'][0]['title']).to eq("UCLA")
+    end
+
+    it 'requests 2nd page and forgets to specify the limit and receives 2nd or last page with default of max 9 records per page' do
+      get api_v1_schools_path(page: 2), headers: { "Accept" => "application/json" }
+      expect(json_response['records'].length).to be 3
+      expect(json_response['records'].map{|s| s['title']}).to eq ["Columbia", "NYU", "UCLA"]
+    end
+
+    it 'recieves json with "records", "entries_count", "pages_per_limit" and "page" keys' do
+      get api_v1_schools_path(per_page: 2, page: 2), headers: { "Accept" => "application/json" }
+      expect(json_response.keys).to eq(["records", "entries_count", "pages_per_limit", "page"])
     end
   end
 
