@@ -15,11 +15,11 @@ ActiveRecord::Schema.define(version: 2019_02_18_042003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "schools", id: :serial, force: :cascade do |t|
+  create_table "schools", force: :cascade do |t|
     t.text "title"
-    t.jsonb "details", default: {}, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.jsonb "details", default: "{}", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
