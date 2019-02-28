@@ -13,6 +13,8 @@ class School < ApplicationRecord
       where_title_is params[:title]
     elsif params[:details].present?
       params[:details].is_a?(ActionController::Parameters) ? where_details_are(params[:details].as_json) : where_details_key_is(params[:details])
+    elsif params[:per_page].present? || params[:page].present?
+      paginate(params[:per_page], params[:page])
     else
       all
     end
