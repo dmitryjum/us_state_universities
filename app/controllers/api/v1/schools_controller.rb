@@ -29,6 +29,10 @@ class Api::V1::SchoolsController < ApplicationController
     end
   end
 
+  api :PATCH, "/v1/schools/:id", "Update a school"
+  param :id, Integer, desc: "Find school by id. This action requires valid JWT token in the header to be authorized. Token is obtain by user sign up and login processes."
+  param :title, String, :desc => "Update schools title"
+  param :details, ["String", "Hash", "Json"], :desc => "Update school details. It can be a string or json format with arbitrary details."
   def update
     if @school.update(school_params)
       render status: 201, json: @school
