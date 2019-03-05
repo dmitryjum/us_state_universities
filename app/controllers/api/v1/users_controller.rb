@@ -1,4 +1,7 @@
 class Api::V1::UsersController < ApplicationController
+
+  api :POST, "/v1/users", "Create a new user"
+  param :user, ["String", "Hash", "Json"], :desc => "User params requires json with 'email', 'password' and 'password_confirmation' string attributes to create a user. 'User created successfully' message will be returned on success"
   def create
     user = User.new(user_params)
 
@@ -9,6 +12,9 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  api :POST, '/v1/users/login', "Login to your user account. Once login is successful, 'auth_token' will be returned."
+  param :email, String, :desc => "String email parameter"
+  param :password, String, :desc => "String password parameter"
   def login
     user = User.find_by(email: params[:email].to_s.downcase)
 
