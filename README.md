@@ -1,4 +1,4 @@
-DOCUMENTATION: http://usastateuniversities.herokuapp.com/api_docs
+DOCUMENTATION: http://usastateuniversities.herokuapp.com
 
 API server that daily reads Wikipedia page: "https://en.wikipedia.org/wiki/List_of_state_universities_in_the_United_States college", looks up college pages from the list on the page, parses college info into hashes and saves in DB, updates existing and adds new ones. It contains around 600 state colleges. User can query colleges by their name or any additional details as well as update college details. The server is built with Ruby on Rails and PostgreSQL DB with TDD pattern. In current stage database contains one Schools table with 'title:string' and 'details:jsonb' rows. Postgres Jsonb datatype allows the server to update DB with new schools with any possible new attributes and their values without migrations.
 
