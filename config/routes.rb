@@ -8,10 +8,9 @@ Rails.application.routes.draw do
           post :login
         end
       end
-      resources :schools, only: [:index, :create] do
+      resources :schools, only: [:index, :create, :update] do
         collection do
           get :top_twenty_keys
-          patch :update
         end
       end
     end

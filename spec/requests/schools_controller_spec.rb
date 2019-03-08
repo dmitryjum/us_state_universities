@@ -144,8 +144,8 @@ describe Api::V1::SchoolsController do
       @first_school = School.first
     end
 
-    it 'found by title' do
-      patch api_v1_schools_path(title: @first_school.title, school: {title: 'University of Magic'}), headers: { "Authorization": @valid_auth_header }
+    it 'found by id' do
+      patch api_v1_school_path(id: @first_school.id, school: {title: 'University of Magic'}), headers: { "Authorization": @valid_auth_header }
       expect(response.status).to be 201
       expect(json_response['title']).to eq(School.find(@first_school.id).title)
     end
@@ -153,13 +153,13 @@ describe Api::V1::SchoolsController do
     context 'fails to update a school' do
       it 'fails title validation' do
         @last_school = School.last
-        patch api_v1_schools_path(title: @first_school.title, school: {title: @last_school.title}), headers: { "Authorization": @valid_auth_header }
+        patch api_v1_school_path(id: @first_school.id, school: {title: @last_school.title}), headers: { "Authorization": @valid_auth_header }
         expect(response.status).to be 422
         expect(json_response['title'].first).to eq "has already been taken"
       end
 
       it 'fails authentication' do
-        patch api_v1_schools_path(title: @first_school.title, school: {title: 'University of Magic'}), headers: { "Authorization": 'asdf' }
+        patch api_v1_school_path(id: @first_school.id, school: {title: 'University of Magic'}), headers: { "Authorization": 'asdf' }
         expect(response.status).to be 401
         expect(json_response['error']).to eq "Invalid Request or Unauthorized"
       end

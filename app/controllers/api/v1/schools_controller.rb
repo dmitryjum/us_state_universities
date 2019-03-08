@@ -1,5 +1,4 @@
 class Api::V1::SchoolsController < ApplicationController
-  before_action :set_school, only: :update
   before_action :authenticate_request!, only: [:update, :create]
 
   api :GET, "/v1/schools", "List all schools"
@@ -30,9 +29,10 @@ class Api::V1::SchoolsController < ApplicationController
   end
 
   api :PATCH, "/v1/schools/", "Update a school"
-  param :title, String, desc: "Find school by its title. Titles are always unique and enforced by server uniqueness validation. This action requires valid JWT token in the header to be authorized. Token is obtain by user sign up and login processes."
+  param :id, Integer, desc: "Find school by its id. This action requires valid JWT token in the header to be authorized. Token is obtain by user sign up and login processes."
   param :school, ["String", "Hash", "Json"], :desc => "Update school title and details attributes. It can be a string or json format with arbitrary details. e.g. {'school': {'title': 'Majic School', 'details': {'established': '988'}}}"
   def update
+    @school = School.find(params[:id])
     if @school.update(school_params)
       render status: 201, json: @school
     else
@@ -52,10 +52,6 @@ class Api::V1::SchoolsController < ApplicationController
   end
 
   private
-
-  def set_school
-    @school = School.find_by_title(params[:title])
-  end
 
   def school_params
     params.require(:school).permit(:title, :details => {})
