@@ -1,6 +1,6 @@
 class Api::V1::SchoolsController < ApplicationController
   before_action :set_school, only: :update
-  before_action :authenticate_request!, only: :update
+  before_action :authenticate_request!, only: [:update, :create]
 
   api :GET, "/v1/schools", "List all schools"
   param :title, String, :desc => "Find school by arbitrary title \n {'title' => 'Conn'}, or '/api/v1/schools?title=conn'"
@@ -30,10 +30,21 @@ class Api::V1::SchoolsController < ApplicationController
   end
 
   api :PATCH, "/v1/schools/", "Update a school"
-  param :title, Integer, desc: "Find school by its title. Titles are always unique and enforced by server uniqueness validation. This action requires valid JWT token in the header to be authorized. Token is obtain by user sign up and login processes."
-  param :school, ["String", "Hash", "Json"], :desc => "Update school title and details attributes. It can be a string or json format with arbitrary details. e.g. {'school': {'title': 'Majic School', 'details': {'founded': '988'}}}"
+  param :title, String, desc: "Find school by its title. Titles are always unique and enforced by server uniqueness validation. This action requires valid JWT token in the header to be authorized. Token is obtain by user sign up and login processes."
+  param :school, ["String", "Hash", "Json"], :desc => "Update school title and details attributes. It can be a string or json format with arbitrary details. e.g. {'school': {'title': 'Majic School', 'details': {'established': '988'}}}"
   def update
     if @school.update(school_params)
+      render status: 201, json: @school
+    else
+      render json: @school.errors, status: :unprocessable_entity
+    end
+  end
+
+  api :POST, "/v1/schools/", "Create a school"
+  param :school, ["String", "Hash", "Json"], :desc => "Add new school title and details attributes. It can be a string or json format with arbitrary details. e.g. {'school': {'title': 'Majic School', 'details': {'established': '988'}}}"
+  def create
+    @school = School.new(school_params)
+    if @school.save
       render status: 201, json: @school
     else
       render json: @school.errors, status: :unprocessable_entity

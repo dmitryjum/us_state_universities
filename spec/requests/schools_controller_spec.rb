@@ -166,4 +166,26 @@ describe Api::V1::SchoolsController do
     end
   end
 
+  context 'it creates a new school' do
+    it 'succeeds creating a new school' do
+      post api_v1_schools_path(school: {title: "New Modern School", details: {"established" => "1966", "mascot" => "Eagle", "location" => "San Juan, PR"}}), headers: { "Authorization": @valid_auth_header }
+      expect(response.status).to be 201
+      expect(School.count).to be 4
+      expect(json_response["details"]).to eq(School.find_by_title("New Modern School").details)
+    end
+
+    it 'fails authentication' do
+      post api_v1_schools_path(school: {title: "New Modern School", details: {"established" => "1966", "mascot" => "Eagle", "location" => "San Juan, PR"}})
+      expect(response.status).to be 401
+      expect(json_response['error']).to eq "Invalid Request or Unauthorized"
+    end
+
+    it 'fails title validation' do
+      @last_school = School.last
+      post api_v1_schools_path(school: {title: @last_school.title, details: {"established" => "1966", "mascot" => "Eagle", "location" => "San Juan, PR"}}), headers: { "Authorization": @valid_auth_header }
+      expect(response.status).to be 422
+      expect(json_response['title'].first).to eq "has already been taken"
+    end
+  end
+
 end
