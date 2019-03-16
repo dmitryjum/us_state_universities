@@ -9,6 +9,7 @@ gem 'rails', '~> 5.2.1'
 # gem 'sqlite3'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
+gem 'pg_search'
 
 # gem 'http'
 gem 'puma'

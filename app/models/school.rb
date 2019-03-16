@@ -1,11 +1,13 @@
 class School < ApplicationRecord
   include Paginatable
+  include PgSearch
   validates_presence_of :title
   validates_uniqueness_of :title
 
   scope :where_title_is, -> (keyword) { where("title ~* ?", keyword) }
   scope :where_details_key_is, -> (keyword) { where("details ? '#{keyword}'") }
   scope :where_details_are, ->(details) { where("details ->> '#{details.first.first}' ~~* '%#{details.first.last}%'")}
+  pg_search_scope :search, against: [:title, :details], using: { tsearch: { dictionary: "english" } }
 
 
   def self.where_params_are params

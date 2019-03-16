@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_18_042003) do
+ActiveRecord::Schema.define(version: 2019_03_16_055648) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,8 @@ ActiveRecord::Schema.define(version: 2019_02_18_042003) do
     t.jsonb "details", default: "{}", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["details"], name: "index_schools_on_details", using: :gin
+    t.index ["title"], name: "index_schools_on_title", unique: true
   end
 
   create_table "users", force: :cascade do |t|
