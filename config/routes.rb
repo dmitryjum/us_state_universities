@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       resources :schools, only: [:index, :create, :update] do
         collection do
           get :top_twenty_keys
+          get :search
         end
       end
     end

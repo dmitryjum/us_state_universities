@@ -28,6 +28,16 @@ class Api::V1::SchoolsController < ApplicationController
     end
   end
 
+  api :GET, "/v1/schools/search", "Full text search"
+  param :term, String, desc: "Search term. Can be any kind of string. Schools will be searched by the term across their titles and json details"
+  def search
+    @schools = School.search(params[:term]).paginate(params)
+    respond_to do |format|
+      format.json {render json: @schools, status: 200}
+      format.xml {render xml: @schools, status: 200}
+    end
+  end
+
   api :PATCH, "/v1/schools/", "Update a school"
   param :id, Integer, desc: "Find school by its id. This action requires valid JWT token in the header to be authorized. Token is obtain by user sign up and login processes."
   param :school, ["String", "Hash", "Json"], :desc => "Update school title and details attributes. It can be a string or json format with arbitrary details. e.g. {'school': {'title': 'Majic School', 'details': {'established': '988'}}}"

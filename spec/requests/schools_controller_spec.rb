@@ -100,6 +100,14 @@ describe Api::V1::SchoolsController do
     end
   end
 
+  context "it finds schools by any search term using full text search functionality" do
+    it "receives schools where search term words are mentioned" do
+      get search_api_v1_schools_path(term: "type public"), headers: { "Accept" => "application/json" }
+      expect(json_response.count).to be 1
+      expect(json_response.first["title"]).to eq "Columbia"
+    end
+  end
+
   context "it requests top twenty 'details' json keys for API query reference" do
     it "receives json with at least 20 k/v pairs, where keys are 'details' json keys and values are count of their appereances in DB" do
       get top_twenty_keys_api_v1_schools_path, headers: { "Accept" => "application/json" }
