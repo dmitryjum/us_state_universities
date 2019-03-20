@@ -41,13 +41,13 @@ describe Api::V1::SchoolsController do
       expect(response).to be_successful
     end
 
-    it 'receives response with total of 3 school objects' do
-      expect(@json_body.length).to eq 3
+    it 'receives response as the object with "records", "entries_count", "pages_per_limit", "page" keys' do
+      expect(@json_body.keys).to eq ["records", "entries_count", "pages_per_limit", "page"]
     end
 
-    it 'receives response with list of schools that are in DB' do
+    it 'receives response with list of schools that are in DB by the "records" key in the response object' do
       school_titles = School.pluck(:title)
-      returned_titles = @json_body.map {|s| s["title"]}
+      returned_titles = @json_body['records'].map {|s| s["title"]}
       expect(school_titles).to eq returned_titles
     end
   end
@@ -61,11 +61,11 @@ describe Api::V1::SchoolsController do
     end
 
     it "receives response with the correct count of schools in the list by requested keyword" do
-      expect(@json_body.length).to eq @requested_schools.length
+      expect(@json_body['records'].length).to eq @requested_schools.length
     end
 
     it 'receives response with correct school titles in the list by requested keyword' do
-      expect(@json_body.map {|s| s["title"]}.sort).to eq @requested_schools.pluck(:title).sort
+      expect(@json_body['records'].map {|s| s["title"]}.sort).to eq @requested_schools.pluck(:title).sort
     end
   end
 
@@ -77,11 +77,11 @@ describe Api::V1::SchoolsController do
     end
 
     it "receives response with the correct count of schools in the list by requested keyword" do
-      expect(@json_body.length).to eq @requested_school_details.length
+      expect(@json_body['records'].length).to eq @requested_school_details.length
     end
 
     it 'receives response with correct school titles in the list by requested keyword' do
-      expect(@json_body.map {|s| s["details"]}).to eq @requested_school_details
+      expect(@json_body['records'].map {|s| s["details"]}).to eq @requested_school_details
     end
   end
 
@@ -92,19 +92,19 @@ describe Api::V1::SchoolsController do
     end
 
     it "receives response with the correct count of schools in the list by requested keyword" do
-      expect(@json_body.length).to eq @requested_school_details.length
+      expect(@json_body['records'].length).to eq @requested_school_details.length
     end
 
     it 'receives response with correct school titles in the list by requested keyword' do
-      expect(@json_body.map {|s| s["details"]}).to eq @requested_school_details
+      expect(@json_body['records'].map {|s| s["details"]}).to eq @requested_school_details
     end
   end
 
   context "it finds schools by any search term using full text search functionality" do
     it "receives schools where search term words are mentioned" do
       get search_api_v1_schools_path(term: "type public"), headers: { "Accept" => "application/json" }
-      expect(json_response.count).to be 1
-      expect(json_response.first["title"]).to eq "Columbia"
+      expect(json_response['records'].count).to be 1
+      expect(json_response['records'].first["title"]).to eq "Columbia"
     end
   end
 
