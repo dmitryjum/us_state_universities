@@ -20,10 +20,15 @@ class Api::V1::UsersController < ApplicationController
 
     if user && user.authenticate(params[:password])
         auth_token = JsonWebToken.encode({user_id: user.id})
-        render json: {auth_token: auth_token}, status: :ok
+        render json: {email: user.email, auth_token: auth_token}, status: :ok
     else
       render json: {error: 'Invalid username / password'}, status: :unauthorized
     end
+  end
+
+  def isAuthenticated
+    authenticate_request!
+    render json: {email: @current_user.email} if @current_user
   end
 
   private
