@@ -31,10 +31,17 @@ describe Api::V1::UsersController do
 			@jwt = JsonWebToken.encode(user_id: user.id)
 		end
 
-		it 'logs user in successfully' do
-			post login_api_v1_users_path(email: "email@example.com", password: "password")
-			expect(response).to be_successful
-			expect(json_response['auth_token']).to eq(@jwt)
+		describe 'logs user in successfully' do
+			it 'returns auth_token' do
+				post login_api_v1_users_path(email: "email@example.com", password: "password")
+				expect(response).to be_successful
+				expect(json_response['auth_token']).to eq(@jwt)
+			end
+
+			it 'returns users email' do
+				post login_api_v1_users_path(email: "email@example.com", password: "password")
+				expect(json_response['email']).to eq("email@example.com")
+			end
 		end
 
 		it 'fails to log user in' do
