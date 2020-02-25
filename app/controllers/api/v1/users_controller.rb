@@ -26,7 +26,7 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
-  def isAuthenticated
+  def is_authenticated
     authenticate_request!
     render json: {email: @current_user.email} if @current_user
   end

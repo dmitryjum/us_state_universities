@@ -44,16 +44,16 @@ describe Api::V1::UsersController do
 			end
 		end
 
-		describe 'isAuthenticated' do
+		describe 'is_authenticated' do
 			it 'fails to verify Auth' do
-	      get isAuthenticated_api_v1_users_path
+	      get is_authenticated_api_v1_users_path
 	      expect(response.status).to be 401
 	      expect(json_response['error']).to eq "Invalid Request or Unauthorized"
 			end
 
 			it 'succeds to verify Auth' do
 				valid_auth_header = "Bearer #{@jwt}"
-				get isAuthenticated_api_v1_users_path, headers: { "Authorization": valid_auth_header }
+				get is_authenticated_api_v1_users_path, headers: { "Authorization": valid_auth_header }
 				expect(response.status).to be 200
 				expect(json_response['email']).to eq(@user.email)
 			end
