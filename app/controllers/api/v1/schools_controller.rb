@@ -44,7 +44,7 @@ class Api::V1::SchoolsController < ApplicationController
   def update
     @school = School.find(params[:id])
     if @school.update(school_params)
-      render status: 201, json: @school
+      render status: 200, json: @school
     else
       render json: @school.errors, status: :unprocessable_entity
     end

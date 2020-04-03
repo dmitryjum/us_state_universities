@@ -154,7 +154,7 @@ describe Api::V1::SchoolsController do
 
     it 'found by id' do
       patch api_v1_school_path(id: @first_school.id, school: {title: 'University of Magic'}), headers: { "Authorization": @valid_auth_header }
-      expect(response.status).to be 201
+      expect(response.status).to be 200
       expect(json_response['title']).to eq(School.find(@first_school.id).title)
     end
 
