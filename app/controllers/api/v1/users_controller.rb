@@ -26,6 +26,7 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  api :GET, '/v1/users/is_authenticated', "Requires correct 'Bearer auth_token' set as a value to Autharization key in headers to get authenticated"
   def is_authenticated
     authenticate_request!
     render json: {email: @current_user.email} if @current_user
