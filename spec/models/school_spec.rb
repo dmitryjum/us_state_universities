@@ -3,7 +3,6 @@ require 'rails_helper'
 describe School do
   describe ".insert_or_update_one" do
     subject {School.insert_or_update_one(data)}
-    let(:school) {FactoryBot.create :school, title: "The University of Alabama System"}
     let(:data) do
       {"title"=>"The University of Alabama System",
         "details"=>
