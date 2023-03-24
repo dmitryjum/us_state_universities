@@ -17,8 +17,8 @@ class CaptureExceptions
   private
 
   def capture_exceptions(env)
-    uri = URI('http://localhost:3000/record_exceptions')
-    Net::HTTP.post_from(uri,
+    uri = URI('http://localhost:3002/record_exceptions')
+    Net::HTTP.post_form(uri,
       message: @exception.message,
       backtrace: @exception.backtrace[0..5].join("\n")
     )
@@ -29,7 +29,7 @@ class CaptureExceptions
   end
 
   def source
-    @exception.backtrace.first.split(:)
+    @exception.backtrace.first.split(":")
   end
 
   def file_location
