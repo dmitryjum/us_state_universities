@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/dmitryjum/bugtrapper
+  revision: de9e7cbb70900faac6dbcbda6228a29e970f3a9c
+  specs:
+    bugtrapper (0.1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -210,6 +216,7 @@ DEPENDENCIES
   apipie-rails
   bcrypt (~> 3.1.7)
   bootsnap (>= 1.1.0)
+  bugtrapper!
   database_cleaner
   factory_bot_rails
   ffaker

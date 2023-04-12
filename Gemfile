@@ -38,6 +38,8 @@ gem 'rack-cors'
 
 gem "sprockets", "<4"
 
+gem 'bugtrapper', git: 'https://github.com/dmitryjum/bugtrapper'
+
 # Use unicorn as the app server
 # gem 'unicorn'
 
