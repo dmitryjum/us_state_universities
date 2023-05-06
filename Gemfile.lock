@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/dmitryjum/bugtrapper
-  revision: e0c231c7d131b343b2d7a68ef69ec8e7f48aee53
+  revision: 017cd9b1f7f205d508f3650d07d98b06553a15d3
   specs:
     bugtrapper (0.1.0)
 
