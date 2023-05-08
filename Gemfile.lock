@@ -1,8 +1,9 @@
 GIT
   remote: https://github.com/dmitryjum/bugtrapper
-  revision: 017cd9b1f7f205d508f3650d07d98b06553a15d3
+  revision: 352fdffe0532dc745c584587dc7697484610536d
   specs:
     bugtrapper (0.1.0)
+      httparty (~> 0.21.0)
 
 GEM
   remote: https://rubygems.org/
@@ -77,6 +78,9 @@ GEM
     ffi (1.15.5)
     globalid (1.0.1)
       activesupport (>= 5.0)
+    httparty (0.21.0)
+      mini_mime (>= 1.0.0)
+      multi_xml (>= 0.5.2)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     jbuilder (2.11.5)
@@ -100,6 +104,7 @@ GEM
     mini_portile2 (2.8.1)
     minitest (5.17.0)
     msgpack (1.6.0)
+    multi_xml (0.6.0)
     net-imap (0.3.2)
       date
       net-protocol
